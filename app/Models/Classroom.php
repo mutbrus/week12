@@ -27,6 +27,16 @@ class Classroom
     {
         return self::$data['teachers'];
     }
+    // Get teacher by ID
+    public static function getTeacherById($id)
+    {
+        foreach (self::$data['teachers'] as $teacher) {
+            if ($teacher['id'] == $id) {
+                return $teacher;
+            }
+        }
+        return null;
+    }
 
     // Get student by ID
     public static function getStudentById($id)
@@ -49,18 +59,23 @@ class Classroom
        return false;
    }
 
-   // Create student
-   public static function createStudent($newStudent)
-   {
-       // Check for conflicting ID
-       foreach (self::$data['students'] as $student) {
-           if ($student['id'] == $newStudent['id']) {
-               return false;
-           }
-       }
-       self::$data['students'][] = $newStudent;
-       return true;
-   }
+   // post student get by required fields 
+    public static function createStudent($name, $age)
+    {
+         // Check for conflicting ID
+         foreach (self::$data['students'] as $student) {
+              if ($student['name'] == $name) {
+                return false;
+              }
+         }
+         $newStudent = [
+              'name' => $name,
+              'age' => $age,
+              'id' => count(self::$data['students']) + 1
+         ];
+         self::$data['students'][] = $newStudent;
+         return true;
+    }
 
    // Create teacher
    public static function createTeacher($newTeacher)
@@ -87,13 +102,14 @@ class Classroom
    }
 
    // Edit teacher by ID
-   public static function editTeacherById($id, $updates)
-   {
-       $index = array_search($id, array_column(self::$data['teachers'], 'id'));
-       if ($index !== false) {
-           self::$data['teachers'][$index] = array_merge(self::$data['teachers'][$index], $updates);
-           return self::$data['teachers'][$index];
-       }
-       return null;
-   }
+    public static function editTeacherById($id, $updates)
+    {
+         $index = array_search($id, array_column(self::$data['teachers'], 'id'));
+            // Check for conflicting ID
+             if ($index !== false) {
+              self::$data['teachers'][$index] = array_merge(self::$data['teachers'][$index], $updates);
+              return self::$data['teachers'][$index];
+         }
+         return null;
+    }
 }

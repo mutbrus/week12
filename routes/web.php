@@ -23,7 +23,7 @@ Route::get('/students/{id}', function($id) {
 });
 
 Route::get('/teachers/{id}', function($id) {
-    $teacher = Classroom::getTeachers()->firstWhere('id', $id);
+    $teacher = Classroom::getTeacherById($id);
     return response()->json($teacher ?? ['message' => 'Teacher not found'], $teacher ? 200 : 404);
 });
 
@@ -45,10 +45,14 @@ Route::patch('/students/{id}', function($id) {
     return response()->json($student ?? ['message' => 'Student not found'], $student ? 200 : 404);
 });
 
-Route::patch('/teachers/{id}', function($id) {
+Route::put('/teachers/{id}', function($id) {
     $body = request()->all();
+    // Assuming you want to update the teacher's name and subject
+    // You can adjust this as per your requirements
+    // For example, if you want to update the teacher's name and subject
+    // $teacher = Classroom::editTeacherById($id, $body['name'], $body['subject']);
     $teacher = Classroom::editTeacherById($id, $body['name'], $body['subject']);
-    return response()->json($teacher ?? ['message' => 'Teacher not found'], $teacher ? 200 : 404);
+    return response()->json($teacher ?? ['message' => 'Teacher not found'], $teacher ? 202 : 404);
 });
 
 Route::delete('/students/{id}', function($id) {
